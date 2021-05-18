@@ -28,13 +28,12 @@ func init() {
 	// init redshift client
 	mySession := session.Must(session.NewSession())
 	rsSvc = rsa.New(mySession) // may need to add configurations
+	if rsSvc == nil {
+		log.Panic("did not connect to the redshift api service")
+	}
 }
 
 func (r *RedshiftEvent) ExecuteStatements(ctx context.Context) error {
-	if rsSvc == nil {
-		return fmt.Errorf("the session is not connected")
-	}
-
 	input := &rsa.ExecuteStatementInput{
 		ClusterIdentifier: &r.ClusterId,
 		Database:          &r.Database,
