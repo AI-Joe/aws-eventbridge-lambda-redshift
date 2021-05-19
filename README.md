@@ -1,4 +1,6 @@
 # aws-eventbrige-lambda-redshift
+Go ported, reduced version of: [aws-samples/aws-lambda-redshift-event-driven-app](https://github.com/aws-samples/aws-lambda-redshift-event-driven-app.git)
+
 Template repository for a scheduled event bridge with lambda rule to query redshift
 
 ## Architecture
