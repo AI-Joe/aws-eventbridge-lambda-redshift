@@ -1,0 +1,13 @@
+LambdaRedshiftDataApiETL:
+  DependsOn:
+    - LambdaRedshiftDataApiETLRole
+  Type: AWS::Lambda::Function
+  Properties:
+    Description: Lambda function to asynchronously execute defined commands with Amazon Redshift Data API
+    Handler: index.handler
+    Runtime: go1.13.8
+    Role: !GetAtt 'LambdaRedshiftDataApiETLRole.Arn'
+    Timeout: 30
+    Code: # TODO: Add finished go handler to zip file
+      ZipFile: |
+          # handler

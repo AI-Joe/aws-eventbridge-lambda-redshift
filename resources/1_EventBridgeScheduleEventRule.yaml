@@ -1,0 +1,15 @@
+EventBridgeScheduledEventRule:
+  Type: "AWS::Events::Rule"
+  Properties:
+    Description: Scheduled Event Rule to be triggered periodically based on cron expression.
+    ScheduleExpression: !Ref ExecutionSchedule
+    State: "ENABLED"
+    Targets:
+      -
+        Arn:
+          Fn::GetAtt:
+            - "LambdaRedshiftDataApiETL"
+            - "Arn"
+        Id: ScheduledEventRedshiftELT
+        #TODO: Adjust this based on the actual structure of an incoming event
+        Input: !Sub "{\"Input\":{\"redshift_cluster_id\":\"${RedshiftClusterIdentifier}\",\"redshift_database\":\"${DatabaseName}\",\"redshift_user\":\"${DbUsername}\",\"statements\":\"${SqlText}\",\"secret_arn\":\"${RedshiftArn}\"}}"

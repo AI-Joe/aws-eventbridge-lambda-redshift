@@ -1,0 +1,38 @@
+LambdaRedshiftDataApiETLRole:
+  Type: AWS::IAM::Role
+  Properties:
+    Description : IAM Role for lambda to access Redshift and SNS topic
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+    AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+    Path: /
+    Policies:
+        -
+          PolicyName: RedshiftAccessPolicy
+          PolicyDocument :
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: redshift:GetClusterCredentials
+                Resource:
+                  - !Sub arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${RedshiftClusterIdentifier}
+                  - !Sub arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:dbname:${RedshiftClusterIdentifier}/${DatabaseName}
+                  - !Sub arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:dbuser:${RedshiftClusterIdentifier}/${DbUsername}
+              -
+                Effect: "Allow"
+                Action:
+                - redshift-data:ExecuteStatement
+                - redshift-data:ListStatements
+                - redshift-data:GetStatementResult
+                - redshift-data:DescribeStatement
+                Resource: "*"
